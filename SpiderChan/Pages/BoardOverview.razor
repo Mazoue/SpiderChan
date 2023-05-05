@@ -1,0 +1,74 @@
+﻿@page "/board/{boardId}"
+@page "/board/{boardId}/{boardName}"
+@using Models.Chan
+
+@*https://docs.microsoft.com/en-us/dotnet/architecture/blazor-for-web-forms-developers/components*@
+
+<head>
+    <link rel="stylesheet" href="/css/board.css" />
+</head>
+
+@if (!IsLoading)
+{
+    <div class="content-container" style="@(downloadManager?.ShowDownloadManager == true ? "padding-bottom: 300px;" : "")">
+
+        <h1>@BoardTitle</h1>
+
+        <table class="headerlayouttable" style="width:100%">
+            <tr>
+                <td> <input type="checkbox" @onchange="eventArgs => { SelectAllThreads(eventArgs.Value); }" />Select All</td>
+                <td style="text-align:right"><button type="button" @onclick="@(async () => await DownloadCatalogue(Catalogues))">Download</button></td>
+            </tr>
+        </table>
+        <br />
+        <br />
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Expand</th>
+                    <th>Select</th>
+                    <th>Thread Id</th>
+                    <th>Subject</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Catalogues != null)
+                {
+                    @foreach (var page in Catalogues.ToList())
+                    {
+                        foreach (var thread in page.Threads)
+                        {
+                            <tr>
+                                <td>
+                                    <button type="button" @onclick="@(() => ExpandThreadPosts(thread))">Expand</button>
+                                </td>
+                                <td>
+                                    <label>
+                                        <input type="checkbox" @bind="thread.Checked" />
+                                    </label>
+                                </td>
+                                <td>@thread.No</td>
+                                <td>@thread.Sub</td>
+                                <td>
+                                    <div class="com-container" style="overflow: scroll; white-space: normal;">
+                                        @((MarkupString)thread.Com)
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div id="download-manager-container" class="download-manager-container" style="@(downloadManager?.ShowDownloadManager  == true ? "display: flex;" : "display: none;")">
+        <DownloadManager @ref="downloadManager"></DownloadManager>
+    </div>
+}
+else
+{
+    <div>Loading...</div>
+}

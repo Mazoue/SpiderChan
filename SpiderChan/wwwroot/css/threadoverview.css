@@ -1,0 +1,48 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+    background-color: #ffffff;
+}
+
+.headerlayouttable {
+    width: 100%;
+}
+
+.table {
+    width: 100%;
+}
+
+.content-container {
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.com-container {
+    max-height: 100px;
+}
+
+.download-manager-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    background-color: #ffffff;
+    max-width: calc(100% - 5px);
+    margin-left: 12.7%;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: 2px solid #d0d0d0;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.table-wrapper {
+    max-height: 200px; /* Adjust this value to control the height of the table */
+    overflow-y: auto; /* Add a scrollbar for overflow */
+    width: 100%
+}
