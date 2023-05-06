@@ -31,10 +31,11 @@ namespace SpiderChan.Pages
         private IEnumerable<Catalogue> Catalogues { get; set; }
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            if (firstRender)
-            {
-                await JSRuntime.InvokeVoidAsync("updateDownloadManagerContainerMaxWidth");
-            }
+            await JSRuntime.InvokeVoidAsync("updateDownloadManagerContainerMaxWidth");
+            //if (firstRender)
+            //{
+            //    await JSRuntime.InvokeVoidAsync("updateDownloadManagerContainerMaxWidth");
+            //}
         }
 
         protected override async Task OnInitializedAsync()

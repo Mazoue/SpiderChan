@@ -10,7 +10,7 @@
 
 @if (!IsLoading)
 {
-    <div class="content-container" style="@(downloadManager?.ShowDownloadManager == true ? "padding-bottom: 300px;" : "")">
+    <div style="@(downloadManager?.ShowDownloadManager == true ? "padding-bottom: 300px;" : "")">
 
         <h1>@BoardTitle</h1>
 
@@ -64,7 +64,7 @@
         </table>
     </div>
 
-    <div id="download-manager-container" class="download-manager-container" style="@(downloadManager?.ShowDownloadManager  == true ? "display: flex;" : "display: none;")">
+    <div style="@(downloadManager?.ShowDownloadManager  == true ? "display: flex;" : "display: none;")">
         <DownloadManager @ref="downloadManager"></DownloadManager>
     </div>
 }
