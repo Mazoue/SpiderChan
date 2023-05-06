@@ -18,26 +18,14 @@ namespace SpiderChan.Pages
         [Inject]
         private NavigationManager NavManager { get; set; }
         [Inject]
-        private IBoardService BoardService { get; set; }
-
-        [Inject]
-        public IJSRuntime JSRuntime { get; set; }
-
+        private IBoardService BoardService { get; set; }        
 
         private DownloadManager downloadManager;
         private string BoardTitle { get; set; } = string.Empty;
         private bool IsLoading { get; set; } = true;
 
         private IEnumerable<Catalogue> Catalogues { get; set; }
-        protected override async Task OnAfterRenderAsync(bool firstRender)
-        {
-            await JSRuntime.InvokeVoidAsync("updateDownloadManagerContainerMaxWidth");
-            //if (firstRender)
-            //{
-            //    await JSRuntime.InvokeVoidAsync("updateDownloadManagerContainerMaxWidth");
-            //}
-        }
-
+        
         protected override async Task OnInitializedAsync()
         {
             if (BoardId != null)
@@ -81,7 +69,7 @@ namespace SpiderChan.Pages
             {
                 boardDownloadRequest.Catalogues.Add(catalogue);
             }
-            downloadManager.UpdateVisibility();
+            await downloadManager.UpdateVisibility();
             await downloadManager.DownloadBoard(boardDownloadRequest);
         }
     }

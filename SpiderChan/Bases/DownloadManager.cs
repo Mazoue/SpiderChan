@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using Models.Chan;
 using Models.Downloads;
 using Services.Interfaces;
@@ -14,6 +15,9 @@ namespace SpiderChan.Pages
         [Inject]
         private IThreadService ThreadService { get; set; }
 
+        [Inject]
+        public IJSRuntime JSRuntime { get; set; }
+
         private List<FileDownloadRequest> Posts { get; set; }
 
         public bool ShowDownloadManager { get; set; }
@@ -21,10 +25,15 @@ namespace SpiderChan.Pages
         private int ProcessedFilesCount { get; set; }
         private int TotalFilesCount { get; set; }
 
-        public void UpdateVisibility()
+        public async Task UpdateVisibility()
         {
             ShowDownloadManager = Posts != null && Posts.Any();
-            StateHasChanged();
+            await InvokeAsync(() => StateHasChanged());
+                        
+            if(ShowDownloadManager)
+            {
+                await JSRuntime.InvokeVoidAsync("updateDownloadManagerContainerMaxWidth");
+            }            
         }
 
         public async Task DownloadFiles(DownloadRequest downloadRequest)
@@ -52,7 +61,6 @@ namespace SpiderChan.Pages
                 }
             }
         }
-
 
         public async Task DownloadCatalogue(Catalogue? catalogue, string boardId)
         {
