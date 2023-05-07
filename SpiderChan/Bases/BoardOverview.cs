@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 using Models.Chan;
 using Models.Downloads;
 using Services.Interfaces;
@@ -18,17 +17,17 @@ namespace SpiderChan.Pages
         [Inject]
         private NavigationManager NavManager { get; set; }
         [Inject]
-        private IBoardService BoardService { get; set; }        
+        private IBoardService BoardService { get; set; }
 
         private DownloadManager downloadManager;
         private string BoardTitle { get; set; } = string.Empty;
         private bool IsLoading { get; set; } = true;
-
+ 
         private IEnumerable<Catalogue> Catalogues { get; set; }
-        
+
         protected override async Task OnInitializedAsync()
         {
-            if (BoardId != null)
+            if(BoardId != null)
             {
                 Catalogues = await BoardService.GetBoardCatalogue(BoardId);
             }
@@ -41,20 +40,20 @@ namespace SpiderChan.Pages
                 ? $"/thread/{BoardId}/{currentThread.No}/{HttpUtility.UrlEncode(currentThread.Sub)}"
                 : $"/thread/{BoardId}/{currentThread.No}");
 
-
         private async Task SelectAllThreads(object isChecked)
         {
-            foreach (var catalog in Catalogues)
+            bool checkedValue = (bool)isChecked;
+            foreach(var catalog in Catalogues)
             {
-                foreach (var currentThread in catalog.Threads)
+                foreach(var currentThread in catalog.Threads)
                 {
-                    currentThread.Checked = (bool)isChecked;
+                    currentThread.Checked = checkedValue;
                 }
-                catalog.Checked = true;
             }
-
-            await InvokeAsync(() => StateHasChanged());
+            await InvokeAsync(StateHasChanged);
         }
+
+
 
         protected async Task DownloadCatalogue(IEnumerable<Catalogue> catalogues)
         {
@@ -63,7 +62,7 @@ namespace SpiderChan.Pages
                 BoardId = BoardId,
                 Catalogues = new List<Catalogue?>()
             };
-          
+
             boardDownloadRequest.Catalogues.AddRange(
                 catalogues.Where(catalogue => catalogue.Threads.Any(thread => thread.Checked))
             );

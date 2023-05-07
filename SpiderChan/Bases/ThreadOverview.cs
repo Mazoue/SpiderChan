@@ -87,7 +87,6 @@ namespace SpiderChan.Pages
                 ThreadTitle = threadTitle,
                 BoardId = boardId,
                 Posts = posts
-
             }
         });
     }

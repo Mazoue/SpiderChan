@@ -2,7 +2,6 @@
 @page "/board/{boardId}/{boardName}"
 @using Models.Chan
 
-@*https://docs.microsoft.com/en-us/dotnet/architecture/blazor-for-web-forms-developers/components*@
 
 <head>
     <link rel="stylesheet" href="/css/board.css" />
@@ -10,14 +9,17 @@
 
 @if (!IsLoading)
 {
-    //<div style="@((downloadManager?.ShowDownloadManager == true) ? "padding-bottom: 300px;" : "")">
+    <div style="@((downloadManager?.ShowDownloadManager == true) ? "padding-bottom: 300px;" : "")">
 
 
         <h1>@BoardTitle</h1>
 
         <table class="headerlayouttable" style="width:100%">
             <tr>
-            <td> <input type="checkbox" @oninput="eventArgs => {SelectAllThreads(((ChangeEventArgs)eventArgs).Value); }" />Select All</td>
+                <td>
+                    <input type="checkbox" @oninput="async eventArgs => await SelectAllThreads(((ChangeEventArgs)eventArgs).Value)" />
+                    Select All
+                </td>
                 <td style="text-align:right"><button type="button" @onclick="@(async () => await DownloadCatalogue(Catalogues))">Download</button></td>
             </tr>
         </table>
@@ -46,9 +48,10 @@
                                     <button type="button" @onclick="@(() => ExpandThreadPosts(thread))">Expand</button>
                                 </td>
                                 <td>
-                                    <label>
-                                        <input type="checkbox" @oninput="eventArgs => { thread.Checked = (bool?)((ChangeEventArgs)eventArgs)?.Value ?? false; }" />
-                                    </label>
+                                    
+                                <input @bind=@thread.Checked type="checkbox" />
+                                       @* <input type="checkbox" @oninput="eventArgs => { thread.Checked = (bool?)((ChangeEventArgs)eventArgs)?.Value ?? false; }" />*@
+                                    
                                 </td>
                                 <td>@thread.No</td>
                                 <td>@thread.Sub</td>
@@ -63,7 +66,7 @@
                 }
             </tbody>
         </table>
-    //</div>
+    </div>
 
     <div style="@(downloadManager?.ShowDownloadManager  == true ? "display: flex;" : "display: none;")">
         <DownloadManager @ref="downloadManager"></DownloadManager>

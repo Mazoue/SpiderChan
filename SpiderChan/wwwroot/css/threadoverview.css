@@ -1,10 +1,36 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+﻿/* Google Fonts - Futura-like font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
+/* Base font styling */
 body {
     font-family: 'Poppins', sans-serif;
     color: #333;
     background-color: #ffffff;
 }
+
+/* Define a grid container for the table */
+.table-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: auto;
+    grid-column-gap: 10px;
+    border-collapse: collapse;
+}
+
+    /* Define styles for the table cells */
+    .table-grid > div {
+        padding: 10px;
+        text-align: center;
+        background-color: #f8f8f8;
+        border: 1px solid #e1e1e1;
+    }
+
+        /* Define styles for the table header cells */
+        .table-grid > div:first-child {
+            text-align: left;
+            font-weight: 600;
+            background-color: #f0f0f0;
+        }
 
 .headerlayouttable {
     width: 100%;
@@ -26,14 +52,14 @@ body {
 .download-manager-container {
     position: fixed;
     bottom: 0;
-    left: 0;
-    right: 0;
+    left: 250px;
+    right: auto;
     height: 250px;
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
     background-color: #ffffff;
-    max-width: calc(100% - 5px);
-    margin-left: 12.7%;
     padding-left: 10px;
     padding-right: 10px;
     border: 2px solid #d0d0d0;
@@ -41,8 +67,9 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
+
 .table-wrapper {
-    max-height: 200px; /* Adjust this value to control the height of the table */
-    overflow-y: auto; /* Add a scrollbar for overflow */
+    max-height: 200px;
+    overflow-y: auto;
     width: 100%
 }
