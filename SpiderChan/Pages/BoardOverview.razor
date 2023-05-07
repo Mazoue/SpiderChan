@@ -47,12 +47,7 @@
                                 <td>
                                     <button type="button" @onclick="@(() => ExpandThreadPosts(thread))">Expand</button>
                                 </td>
-                                <td>
-                                    
-                                <input @bind=@thread.Checked type="checkbox" />
-                                       @* <input type="checkbox" @oninput="eventArgs => { thread.Checked = (bool?)((ChangeEventArgs)eventArgs)?.Value ?? false; }" />*@
-                                    
-                                </td>
+                                <td> <input @bind=@thread.Checked type="checkbox" /> </td>
                                 <td>@thread.No</td>
                                 <td>@thread.Sub</td>
                                 <td>
