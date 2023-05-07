@@ -32,7 +32,13 @@ function isCovered(element) {
     return topElement && topElement !== element && !element.contains(topElement);
 }
 
-function isElementVisibleOnScreen(element) {
+function isElementVisibleOnScreen(selector) {
+    const element = document.querySelector(selector);
+
+    if (!element) {
+        return false;
+    }
+
     return isVisible(element) && isWithinViewport(element) && !isCovered(element);
 }
 
@@ -43,20 +49,22 @@ window.updateDownloadManagerContainerMaxWidth = () => {
 
     if (!sidebar) {
         console.log("Sidebar not found");
-    } else if (!isElementVisibleOnScreen(sidebar)) {
+    } else if (!isElementVisibleOnScreen('.sidebar')) {
         console.log("Sidebar is not visible on the screen");
     }
 
     if (!downloadManagerContainer) {
         console.log("DownloadManager container not found");
-    } else if (!isElementVisibleOnScreen(downloadManagerContainer)) {
+    } else if (!isElementVisibleOnScreen('download-manager-container')) {
         console.log("DownloadManager container is not visible on the screen");
     }
 
-    if (sidebar && downloadManagerContainer && isElementVisibleOnScreen(sidebar) && isElementVisibleOnScreen(downloadManagerContainer)) {
+    if (sidebar && downloadManagerContainer && isElementVisibleOnScreen('.sidebar') && isElementVisibleOnScreen('download-manager-container')) {
+        const sidebar = document.querySelector('.sidebar');
+        const downloadManagerContainer = document.getElementById('download-manager-container');
         const sidebarWidth = sidebar.offsetWidth;
-        console.log("Sidebar width:", sidebarWidth);
+        
         downloadManagerContainer.style.left = `${sidebarWidth}px`; // Set the left property
-        console.log("DownloadManager container left set to:", downloadManagerContainer.style.left);
+        
     }
 }

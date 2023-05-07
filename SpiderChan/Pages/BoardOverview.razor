@@ -10,7 +10,8 @@
 
 @if (!IsLoading)
 {
-    <div style="@(downloadManager?.ShowDownloadManager == true ? "padding-bottom: 300px;" : "")">
+    <div style="@((downloadManager?.ShowDownloadManager == true) ? "padding-bottom: 300px;" : "")">
+
 
         <h1>@BoardTitle</h1>
 
@@ -46,7 +47,7 @@
                                 </td>
                                 <td>
                                     <label>
-                                        <input type="checkbox" @bind="thread.Checked" />
+                                        <input type="checkbox" @oninput="eventArgs => { thread.Checked = (bool?)((ChangeEventArgs)eventArgs)?.Value ?? false; }" />
                                     </label>
                                 </td>
                                 <td>@thread.No</td>

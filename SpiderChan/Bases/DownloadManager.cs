@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
 using Models.Chan;
 using Models.Downloads;
 using Services.Interfaces;
@@ -15,27 +14,16 @@ namespace SpiderChan.Pages
         [Inject]
         private IThreadService ThreadService { get; set; }
 
-        [Inject]
-        public IJSRuntime JSRuntime { get; set; }
-
         private List<FileDownloadRequest> Posts { get; set; }
 
         public bool ShowDownloadManager { get; set; }
 
         private int ProcessedFilesCount { get; set; }
         private int TotalFilesCount { get; set; }
-
-        public async Task UpdateVisibility()
+        protected override void OnInitialized()
         {
-            ShowDownloadManager = Posts != null && Posts.Any();
-            await InvokeAsync(() => StateHasChanged());
-                        
-            if(ShowDownloadManager)
-            {
-                await JSRuntime.InvokeVoidAsync("updateDownloadManagerContainerMaxWidth");
-            }            
+            ShowDownloadManager = false;
         }
-
         public async Task DownloadFiles(DownloadRequest downloadRequest)
         {
             var downloads = PostService.GenerateDownloads(downloadRequest);
@@ -47,20 +35,22 @@ namespace SpiderChan.Pages
             TotalFilesCount = downloads.Count(); // Set the total files count
 
             Posts = downloads.ToList();
-            UpdateVisibility();
+            ShowDownloadManager = Posts.Any(); // Update the visibility based on the presence of posts
+            await InvokeAsync(() => StateHasChanged()); // Inform the parent component about the state change
 
             if (Posts != null && Posts.Any())
-            {            
-                StateHasChanged();
-
+            {
                 await foreach (var download in PostService.DownloadPostsAsync(downloads))
                 {
                     Posts.Remove(download);
                     ProcessedFilesCount++; // Increment the processed files count
-                    StateHasChanged();
+
+                    ShowDownloadManager = Posts.Any(); // Update the visibility based on the presence of posts
+                    await InvokeAsync(() => StateHasChanged()); // Inform the parent component about the state change
                 }
             }
         }
+
 
         public async Task DownloadCatalogue(Catalogue? catalogue, string boardId)
         {

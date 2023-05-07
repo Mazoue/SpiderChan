@@ -63,13 +63,11 @@ namespace SpiderChan.Pages
                 BoardId = BoardId,
                 Catalogues = new List<Catalogue?>()
             };
+          
+            boardDownloadRequest.Catalogues.AddRange(
+                catalogues.Where(catalogue => catalogue.Threads.Any(thread => thread.Checked))
+            );
 
-            //This is running multiple instances
-            foreach (var catalogue in catalogues.Where(x => x.Threads.All(y => y.Checked == true)))
-            {
-                boardDownloadRequest.Catalogues.Add(catalogue);
-            }
-            await downloadManager.UpdateVisibility();
             await downloadManager.DownloadBoard(boardDownloadRequest);
         }
     }

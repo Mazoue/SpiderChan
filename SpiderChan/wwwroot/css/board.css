@@ -53,7 +53,7 @@ body {
 .download-manager-container {
     position: fixed;
     bottom: 0;
-    left: 0;
+    left: 250px;
     right: auto;
     height: 250px;
     display: flex;
