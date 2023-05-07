@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Models.Chan;
 using Models.Downloads;
+using Services;
 using Services.Interfaces;
+using Services.Services;
 using System.Web;
 
 namespace SpiderChan.Pages
@@ -14,49 +16,41 @@ namespace SpiderChan.Pages
         [Inject]
         private IThreadService ThreadService { get; set; }
 
-        private List<FileDownloadRequest> Posts { get; set; }
+        [Inject]
+        private DownloadManagerService DownloadManagerService { get; set; }
 
-        public bool ShowDownloadManager { get; set; }
+        public bool ShowDownloadManager => DownloadManagerService.Posts.Any();
 
-        private int ProcessedFilesCount { get; set; }
-        private int TotalFilesCount { get; set; }
         protected override void OnInitialized()
         {
-            ShowDownloadManager = false;
+            base.OnInitialized();
         }
+
         public async Task DownloadFiles(DownloadRequest downloadRequest)
         {
             var downloads = PostService.GenerateDownloads(downloadRequest);
 
-            if (downloads == null || !downloads.Any())
+            if(downloads == null || !downloads.Any())
                 return;
 
-            Posts ??= new List<FileDownloadRequest>();
-            TotalFilesCount = downloads.Count(); // Set the total files count
+            DownloadManagerService.AddDownloads(downloads.ToList());
+            await InvokeAsync(() => StateHasChanged());
 
-            Posts = downloads.ToList();
-            ShowDownloadManager = Posts.Any(); // Update the visibility based on the presence of posts
-            await InvokeAsync(() => StateHasChanged()); // Inform the parent component about the state change
-
-            if (Posts != null && Posts.Any())
+            if(DownloadManagerService.Posts.Any())
             {
-                await foreach (var download in PostService.DownloadPostsAsync(downloads))
+                await foreach(var download in PostService.DownloadPostsAsync(downloads))
                 {
-                    Posts.Remove(download);
-                    ProcessedFilesCount++; // Increment the processed files count
-
-                    ShowDownloadManager = Posts.Any(); // Update the visibility based on the presence of posts
-                    await InvokeAsync(() => StateHasChanged()); // Inform the parent component about the state change
+                    DownloadManagerService.RemoveDownload(download);
+                    await InvokeAsync(() => StateHasChanged());
                 }
             }
         }
 
-
         public async Task DownloadCatalogue(Catalogue? catalogue, string boardId)
         {
-            if (catalogue != null)
+            if(catalogue != null)
             {
-                foreach (var thread in catalogue.Threads)
+                foreach(var thread in catalogue.Threads)
                 {
                     var posts = await ThreadService.GetPostsInThreads(boardId, thread.No);
                     await DownloadFiles(new DownloadRequest()
@@ -74,7 +68,7 @@ namespace SpiderChan.Pages
 
         public async Task DownloadBoard(BoardDownloadRequest boardDownloadRequest)
         {
-            foreach (var catalogue in boardDownloadRequest.Catalogues)
+            foreach(var catalogue in boardDownloadRequest.Catalogues)
             {
                 await DownloadCatalogue(catalogue, boardDownloadRequest.BoardId);
             }

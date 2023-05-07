@@ -2,37 +2,35 @@
     <link rel="stylesheet" href="/css/board.css" />
 </head>
 
-
-    <div id="download-manager-container" class="download-manager-container">
-        <div class="table-wrapper">           
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Post Id</th>
-                        <th>File Name</th>
-                        <th>File Extension</th>
-                        <th>File Size(KB)</th>
-                        <th> <span style="float: right;">@ProcessedFilesCount/@TotalFilesCount</span></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @if (Posts != null && Posts.Any())
+<div id="download-manager-container" class="download-manager-container">
+    <div class="table-wrapper">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Post Id</th>
+                    <th>File Name</th>
+                    <th>File Extension</th>
+                    <th>File Size(KB)</th>
+                    <th> <span style="float: right;">@DownloadManagerService.ProcessedFilesCount/@DownloadManagerService.TotalFilesCount</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if(DownloadManagerService.Posts.Any())
+                {
+                    foreach(var post in DownloadManagerService.Posts)
                     {
-                        @foreach (var post in Posts)
+                        if(@post.FileSize > 1)
                         {
-                            if (@post.FileSize > 1)
-                            {
-                                <tr>
-                                    <td>@post.PostNumber</td>
-                                    <td>@post.FileName.Trim()</td>
-                                    <td>@post.FileExtension</td>
-                                    <td>@post.FileSize</td>
-                                </tr>
-                            }
+                            <tr>
+                                <td>@post.PostNumber</td>
+                                <td>@post.FileName.Trim()</td>
+                                <td>@post.FileExtension</td>
+                                <td>@post.FileSize</td>
+                            </tr>
                         }
                     }
-                </tbody>
-            </table>
-        </div>  
+                }
+            </tbody>
+        </table>
     </div>
-
+</div>

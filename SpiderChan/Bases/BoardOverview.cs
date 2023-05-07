@@ -42,18 +42,18 @@ namespace SpiderChan.Pages
                 : $"/thread/{BoardId}/{currentThread.No}");
 
 
-        private void SelectAllThreads(object isChecked)
+        private async Task SelectAllThreads(object isChecked)
         {
             foreach (var catalog in Catalogues)
             {
                 foreach (var currentThread in catalog.Threads)
                 {
-
                     currentThread.Checked = (bool)isChecked;
-
                 }
+                catalog.Checked = true;
             }
-            StateHasChanged();
+
+            await InvokeAsync(() => StateHasChanged());
         }
 
         protected async Task DownloadCatalogue(IEnumerable<Catalogue> catalogues)

@@ -10,14 +10,14 @@
 
 @if (!IsLoading)
 {
-    <div style="@((downloadManager?.ShowDownloadManager == true) ? "padding-bottom: 300px;" : "")">
+    //<div style="@((downloadManager?.ShowDownloadManager == true) ? "padding-bottom: 300px;" : "")">
 
 
         <h1>@BoardTitle</h1>
 
         <table class="headerlayouttable" style="width:100%">
             <tr>
-                <td> <input type="checkbox" @onchange="eventArgs => { SelectAllThreads(eventArgs.Value); }" />Select All</td>
+            <td> <input type="checkbox" @oninput="eventArgs => {SelectAllThreads(((ChangeEventArgs)eventArgs).Value); }" />Select All</td>
                 <td style="text-align:right"><button type="button" @onclick="@(async () => await DownloadCatalogue(Catalogues))">Download</button></td>
             </tr>
         </table>
@@ -63,7 +63,7 @@
                 }
             </tbody>
         </table>
-    </div>
+    //</div>
 
     <div style="@(downloadManager?.ShowDownloadManager  == true ? "display: flex;" : "display: none;")">
         <DownloadManager @ref="downloadManager"></DownloadManager>

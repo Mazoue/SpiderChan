@@ -9,7 +9,9 @@ namespace SpiderChan.Startup
         public static IServiceCollection RegisterServices(this IServiceCollection services, GeneralConfig generalConfig)
         {
             services.AddScoped<IBoardService, BoardService>();
+            services.AddSingleton<DownloadManagerService>();
             services.AddScoped<IDownloadService, DownloadService>();
+            
             services.AddSingleton<IGeneralConfigService>(e => new GeneralConfigService(generalConfig));
             services.AddSingleton<ILogService, LogService>();
             services.AddScoped<IPostService, PostService>();

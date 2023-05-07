@@ -20,6 +20,7 @@ namespace DataAccess.Repositories
         public async Task<IEnumerable<Catalogue>> GetBoardCatalogue(string boardId)
         {
             var responseBody = await _httpClient.GetStringAsync($"/{boardId}/catalog.json");
+            var x = JsonConvert.DeserializeObject<IEnumerable<Catalogue>>(responseBody) ?? throw new InvalidDeserializationException("Unable to de-serialize Get Board Catalogue response.");
             return JsonConvert.DeserializeObject<IEnumerable<Catalogue>>(responseBody)  ?? throw new InvalidDeserializationException("Unable to de-serialize Get Board Catalogue response.");
         }
     }
